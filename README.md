@@ -1,1 +1,2 @@
-#Battlefy Tech test
+# battlefy-setup
+Setup for battlefy tech test
