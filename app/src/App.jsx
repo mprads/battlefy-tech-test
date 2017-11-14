@@ -22,13 +22,30 @@ class App extends Component {
     return axios.get(`http://localhost:8080/api/matches?accountId=${accountId}`);
   }
 
+  getMatchDetails(gameId) {
+    return axios.get(`http://localhost:8080/api/matchDetails?gameId=${gameId}`);
+  }
+
   searchSummoner(summonerName) {
     this.getSummonerId(summonerName).then((result) => {
       const summonerData = JSON.parse(result.data);
       this.setState({ summoner: summonerData });
       this.getRecentMatches(summonerData.accountId).then((recentMatches) => {
-        const matchesObj = JSON.parse(recentMatches.data);
-        this.setState({ matches: matchesObj.matches });
+        const matchesArray = JSON.parse(recentMatches.data);
+        const matchesPromise = matchesArray.matches.map((match) => {
+          return new Promise((resolve) => {
+            resolve(
+              this.getMatchDetails(match.gameId).then((matchDetails) => {
+                const details = JSON.parse(matchDetails.data);
+                console.log(details, 'in map');
+                return details;
+              }),
+            );
+          });
+        });
+        Promise.all(matchesPromise).then((matches) => {
+          this.setState({ matches });
+        });
       });
     });
   }
@@ -36,12 +53,13 @@ class App extends Component {
   render() {
     return (
       <div>
-       <SearchBar 
-        searchSummoner={this.searchSummoner}
-       />
-       <MatchList 
-        matches={this.state.matches}
-       />
+        <SearchBar
+          searchSummoner={this.searchSummoner}
+        />
+        <MatchList
+          summoner={this.state.summoner}
+          matches={this.state.matches}
+        />
       </div>
     );
   }

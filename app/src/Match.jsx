@@ -9,7 +9,7 @@ class Match extends Component {
   render() {
     return (
       <div>
-        Match
+        {this.props.duration}
       </div>
     );
   }

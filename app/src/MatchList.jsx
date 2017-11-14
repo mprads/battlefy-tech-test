@@ -15,6 +15,7 @@ class MatchList extends Component {
       output = this.props.matches.map((match) => {
         return <Match
           key={match.gameId}
+          duration={match.gameDuration}
         />;
       });
     } else {
