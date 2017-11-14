@@ -44,10 +44,31 @@ class App extends Component {
           });
         });
         Promise.all(matchesPromise).then((matches) => {
-          this.setState({ matches });
+          const filteredMatches = this.filterGames(matches);
+          this.setState({ matches: filteredMatches });
         });
       });
     });
+  }
+
+  filterGames(matchesArray) {
+    const filteredArray = [];
+    matchesArray.forEach((match) => {
+      let participantId;
+      match.participantIdentities.forEach((participant) => {
+        if (participant.player.accountId === this.state.summoner.accountId) {
+          participantId = participant.participantId;
+        }
+      });
+      const filteredMatchObj = {
+        gameDuration: match.gameDuration,
+        gameId: match.gameId,
+        mapId: match.mapId,
+        data: match.participants[participantId - 1],
+      };
+      filteredArray.push(filteredMatchObj);
+    });
+    return filteredArray;
   }
 
   render() {
