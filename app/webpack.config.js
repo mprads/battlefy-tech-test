@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 dotenv.config({ path: `${__dirname}/../.env` });
 
 const isProd = (process.env.NODE_ENV === 'production');
-const entry = isProd ? './app/src/index.jsx' : ['webpack-dev-server/client?http://localhost:3000', './app/src/index.jsx'];
+const entry = isProd ? ['babel-polyfill', './app/src/index.jsx'] : ['babel-polyfill', 'webpack-dev-server/client?http://localhost:3000', './app/src/index.jsx'];
 
 module.exports = {
   devtool: 'eval',
