@@ -9,6 +9,7 @@ class App extends Component {
     super(props);
     this.state = {
       summoner: {},
+      matches: [],
     };
     this.searchSummoner = this.searchSummoner.bind(this);
   }
@@ -17,9 +18,18 @@ class App extends Component {
     return axios.get(`http://localhost:8080/api/summoner?summoner=${summoner}`);
   }
 
+  getRecentMatches(accountId) {
+    return axios.get(`http://localhost:8080/api/matches?accountId=${accountId}`);
+  }
+
   searchSummoner(summonerName) {
     this.getSummonerId(summonerName).then((result) => {
-      console.log(result);
+      const summonerData = JSON.parse(result.data);
+      this.setState({ summoner: summonerData });
+      this.getRecentMatches(summonerData.accountId).then((recentMatches) => {
+        const matchesObj = JSON.parse(recentMatches.data);
+        this.setState({ matches: matchesObj.matches });
+      });
     });
   }
 
@@ -29,7 +39,9 @@ class App extends Component {
        <SearchBar 
         searchSummoner={this.searchSummoner}
        />
-       <MatchList />
+       <MatchList 
+        matches={this.state.matches}
+       />
       </div>
     );
   }
