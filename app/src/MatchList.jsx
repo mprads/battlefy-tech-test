@@ -9,14 +9,24 @@ class MatchList extends Component {
     this.state = {};
   }
 
- 
-
   render() {
+    let output;
+    if (this.props.matches.length !== 0) {
+      output = this.props.matches.map((match) => {
+        return <Match
+          key={match.gameId}
+        />;
+      });
+    } else {
+      output = (
+        <div>
+          No Result
+        </div>
+      );
+    }
     return (
       <div>
-        start of match list
-        <Match />
-        end of match list
+        {output}
       </div>
     );
   }
