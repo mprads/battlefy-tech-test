@@ -14,4 +14,8 @@ I would also greatly improve error handling on failed request to give the user a
 The search function needs to be improved, it does not handle spaces, forgot to add trim and also was not aware
 summoner names could have spaces in them.
 
-![Current status](currentStatus.png);
+I would add more routers to the api index and create controllers to remove logic from in the routes.
+
+I would also like to break the match component into smaller components making the file less busy and easier to refactor
+
+![Current status](currentStatus.png)
