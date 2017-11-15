@@ -33,7 +33,6 @@ class MatchList extends Component {
           item6={match.data.stats.item6}
           win={match.data.stats.win}
           creepScore={match.data.stats.totalMinionsKilled}
-          summonerName={this.props.summoner.name}
         />;
       });
     } else {

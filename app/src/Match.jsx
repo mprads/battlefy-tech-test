@@ -7,6 +7,15 @@ class Match extends Component {
     super(props);
     this.state = {
       champion: {},
+      spell1: {},
+      spell2: {},
+      item0: {},
+      item1: {},
+      item2: {},
+      item3: {},
+      item4: {},
+      item5: {},
+      item6: {},
     };
   }
 
@@ -22,13 +31,24 @@ class Match extends Component {
     return axios.get(`http://localhost:8080/api/item?spellId=${spellId}`);
   }
 
+  // commenting out spells and champions because when they are in the componentDidMount they
+  // exceed the rate limit
   componentDidMount() {
-    // this.getChampion(this.props.championId).then((champion) => {
-    //   console.log(champion, 'testing');
-    //   const championData = JSON.parse(championData.data);
-    //   this.setState({ championData });
+    // this.getChampion(this.props.championId).then((championData) => {
+    //   const champion = JSON.parse(championData.data);
+    //   this.setState({ champion });
     // });
+    // this.getSpell(this.props.spell1Id).then((spellData) => {
+    //   const spell = JSON.parse(spellData.data);
+    //   this.setState({ spell1 });
+    // });
+    // this.getSpell(this.props.spell2Id).then((spellData) => {
+    //   const spell = JSON.parse(spellData.data);
+    //   this.setState({ spell2 });
+    // });
+    
   }
+
   render() {
     function victoryOrDefat(win) {
       return win ? 'victory' : 'defeat';
@@ -40,11 +60,15 @@ class Match extends Component {
       return k / d ? Math.round((k / d) * 100) / 100 : 0;
     }
 
-    function gameDuration(duration) {
-      const time = moment.duration(duration, 'seconds');
-      console.log(time);
-      const seconds = time._data.seconds >= 10 ? time._data.seconds : `0${time._data.seconds}`;
-      return `${time._data.minutes}:${seconds}`;
+    function gameDuration(time) {
+      const duration = moment.duration(time, 'seconds');
+      const seconds = duration._data.seconds >= 10 ? duration._data.seconds : `0${duration._data.seconds}`;
+      return `${duration._data.minutes}:${seconds}`;
+    }
+    function creepPerMinute(cs, time) {
+      const duration = moment.duration(time, 'seconds');
+      return cs / duration._data.minutes ? Math.round((cs / duration._data.minutes) * 100) / 100 : 0;
+
     }
     return (
       <div className={`box ${victoryOrDefat(this.props.win)}`}>
@@ -55,10 +79,19 @@ class Match extends Component {
           {gameDuration(this.props.duration)}
         </div>
         <div>
+          {this.state.champion.name}
+        </div>
+        <div>
+          {this.state.spell1.name} {this.state.spell2.name}
+        </div>
+        <div>
           {this.props.kills}/{this.props.deaths}/{this.props.assists}  {kd(this.props.kills, this.props.deaths)} KDA
         </div>
         <div>
           lvl {this.props.championLevel}
+        </div>
+        <div>
+          {this.props.creepScore} ({creepPerMinute(this.props.creepScore, this.props.duration)})CS
         </div>
       </div>
     );
