@@ -14,6 +14,19 @@ const ENV = process.env.NODE_ENV || 'development';
 
 const app = express();
 
+const allowCrossDomain = (req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  if (req.method === 'OPTIONS') {
+    res.send(200);
+  } else {
+    next();
+  }
+};
+
+app.use(allowCrossDomain);
 app.use('/api', api());
 app.get('/', (req, res) => {
   res.sendFile(path.join(`${__dirname}/../index.html`));
@@ -38,6 +51,8 @@ const startReactDev = () => {
 
 if (ENV === 'development') {
   startReactDev();
+} else {
+  app.use('/build', express.static(`${__dirname}/build`));
 }
 
 app.listen(PORT, () => {
