@@ -46,7 +46,6 @@ class Match extends Component {
     //   const spell = JSON.parse(spellData.data);
     //   this.setState({ spell2 });
     // });
-    
   }
 
   render() {
@@ -68,8 +67,8 @@ class Match extends Component {
     function creepPerMinute(cs, time) {
       const duration = moment.duration(time, 'seconds');
       return cs / duration._data.minutes ? Math.round((cs / duration._data.minutes) * 100) / 100 : 0;
-
     }
+
     return (
       <div className={`box ${victoryOrDefat(this.props.win)}`}>
         <div>
