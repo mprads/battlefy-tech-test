@@ -37,7 +37,6 @@ class App extends Component {
             resolve(
               this.getMatchDetails(match.gameId).then((matchDetails) => {
                 const details = JSON.parse(matchDetails.data);
-                console.log(details, 'in map');
                 return details;
               }),
             );
